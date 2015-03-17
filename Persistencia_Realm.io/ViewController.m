@@ -22,6 +22,7 @@
 @end
 
 @implementation ViewController
+@synthesize foto,imagePickerController;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,6 +45,7 @@
     
     NSArray *itens = @[addFotoItem,cancelarEdicao];
     [fotoToolBar setItems:itens];
+    [self setImageInput];
     
 #warning Captura evento de rotacao de tela para recalcular posicao da toolbar
     [[NSNotificationCenter defaultCenter] addObserver: self selector:   @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
@@ -76,9 +78,10 @@
     if (!alunoSelecionado) {
         return;
     }
-    UIImage *foto = [UIImage imageNamed:@"smile"];
-    [[FotoSingleton sharedInstance] salvarFoto:foto comNome:alunoSelecionado.tia];
-    [_tableView reloadData];
+//    UIImage *foto = [UIImage imageNamed:@"smile"];
+//    [[FotoSingleton sharedInstance] salvarFoto:foto comNome:alunoSelecionado.tia];
+//    [_tableView reloadData];
+    [self presentViewController:imagePickerController animated:YES completion:nil];
 }
 
 - (void)cancelarEdicao {
@@ -150,6 +153,23 @@
     
     
     return cell;
+}
+
+-(void)setImageInput{
+    imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.delegate = self;
+    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+        {
+            UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Desenvolvedor do MackMobile?" message:@"Simulador não têm camera, mas fique tranquilo, no iPhone irá funcionar!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil]; [myAlertView show];
+        }else{
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+        }
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    foto = info[UIImagePickerControllerOriginalImage];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - TableViewDelegate Methods
