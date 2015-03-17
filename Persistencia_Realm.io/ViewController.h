@@ -8,12 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nomeTextField;
 @property (weak, nonatomic) IBOutlet UITextField *tiaTextField;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *botaoSalvar;
+
+@property (weak, nonatomic) IBOutlet UIImageView *foto;
+@property (strong, nonatomic) UIImagePickerController *imagePickerController;
+-(void)setImageInput;
 
 - (IBAction)salvar:(id)sender;
 @end
