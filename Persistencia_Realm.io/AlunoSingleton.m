@@ -7,6 +7,8 @@
 //
 
 #import "AlunoSingleton.h"
+#import <Realm/Realm.h>
+#import "Aluno.h"
 
 @implementation AlunoSingleton
 
@@ -26,6 +28,39 @@ static bool isFirstAccess = YES;
     
     return SINGLETON;
 }
+
+
+- (void)salvar:(Aluno *)aluno {
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    [realm beginWriteTransaction];
+    [realm addObject:aluno];
+    [realm commitWriteTransaction];
+}
+
+
+- (NSArray *)todosAlunos {
+    RLMResults *resultados = [Aluno allObjects];
+    NSMutableArray *alunos = [[NSMutableArray alloc] initWithCapacity:[resultados count]];
+    
+    for (Aluno *a in resultados) {
+        [alunos addObject:a];
+    }
+    
+    return alunos;
+}
+
+
+- (Aluno *)alunoComTIA:(NSString *)tia {
+#warning Implementar - (Aluno *)alunoComTIA:(NSString *)tia
+    return nil;
+}
+
+- (NSArray *)alunoComNome:(NSString *)nome {
+#warning Implementar - (NSArray *)alunoComNome:(NSString *)nome
+    return  nil;
+}
+
+
 
 #pragma mark - Life Cycle
 

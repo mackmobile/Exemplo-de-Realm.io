@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 joaquim. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+
 @interface FotoSingleton : NSObject
 
 /**
@@ -13,5 +17,8 @@
  * @return singleton
  */
 + (FotoSingleton*)sharedInstance;
+
+- (void)salvarFoto:(UIImage *)foto comNome:(NSString *)nome;
+- (UIImage *)recuperarFotoComNome:(NSString *)nome;
 
 @end
