@@ -44,6 +44,7 @@
     
     NSArray *itens = @[addFotoItem,cancelarEdicao];
     [fotoToolBar setItems:itens];
+    [self setImageInput];
     
 #warning Captura evento de rotacao de tela para recalcular posicao da toolbar
     [[NSNotificationCenter defaultCenter] addObserver: self selector:   @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
@@ -65,7 +66,7 @@
     //Obter a orientacao corrente (nao necessario neste projeto
 //    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
     
-    CGFloat posicaoY = self.view.bounds.size.height-44;
+    CGFloat posicaoY = self.view.bounds.size.height - 44;
     CGFloat posicaoX = 0;
     CGFloat width = _tableView.bounds.size.width;
     CGFloat height = 44;
@@ -76,9 +77,17 @@
     if (!alunoSelecionado) {
         return;
     }
-    UIImage *foto = [UIImage imageNamed:@"smile"];
-    [[FotoSingleton sharedInstance] salvarFoto:foto comNome:alunoSelecionado.tia];
-    [_tableView reloadData];
+
+//  UIImage *foto = [UIImage imageNamed:@"smile"];
+
+    NSLog(@"Goint to image picker...");
+    [self presentViewController:_imagePickerController animated:YES completion:nil];
+    NSLog(@"Back from image picker.");
+
+    // IT DOESN'T COME BACK!
+
+//  [[FotoSingleton sharedInstance] salvarFoto:foto comNome:alunoSelecionado.tia];
+//  [_tableView reloadData];
 }
 
 - (void)cancelarEdicao {
@@ -92,6 +101,22 @@
                                               indexPathForSelectedRow] animated: YES];
 }
 
+- (void)setImageInput {
+    _imagePickerController = [[UIImagePickerController alloc] init];
+    _imagePickerController.delegate = self;
+    _imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    NSLog(@"Just finished picking an image.");
+    _photo = info[UIImagePickerControllerOriginalImage];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"Dismissed image picker, going back to saving it?");
+    // NOPE! IT DOES NOT GO BACK...
+
+    [[FotoSingleton sharedInstance] salvarFoto:_photo comNome:alunoSelecionado.tia];
+    [_tableView reloadData];
+}
 
 #pragma mark - Metodos publicos
 
