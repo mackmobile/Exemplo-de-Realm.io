@@ -10,4 +10,14 @@
 
 @implementation Aluno
 
+//Sera necessario se precisar dar valores default para nao ter erro com campos vazio no Realm.io
+//-(instancetype)init{
+//    self = [super init];
+//    
+//    [self setNome:@""];
+//    [self setTia:@""];
+//    
+//    return self;
+//}
+
 @end

@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 joaquim. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
+@class Aluno;
+
 @interface AlunoSingleton : NSObject
 
 /**
@@ -13,5 +17,10 @@
  * @return singleton
  */
 + (AlunoSingleton*)sharedInstance;
+
+- (void)salvar:(Aluno *)aluno;
+- (NSArray *)todosAlunos;
+- (Aluno *)alunoComTIA:(NSString *)tia;
+- (NSArray *)alunoComNome:(NSString *)nome;
 
 @end

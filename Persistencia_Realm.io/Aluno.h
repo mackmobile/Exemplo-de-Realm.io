@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Realm/Realm.h>
 
 @interface Aluno : RLMObject
+
+@property (nonatomic, strong) NSString *nome;
+@property (nonatomic, strong) NSString *tia;
 
 @end
