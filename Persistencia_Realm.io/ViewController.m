@@ -11,7 +11,7 @@
 #import "AlunoSingleton.h"
 #import "FotoSingleton.h"
 
-@interface ViewController ()
+@interface ViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     AlunoSingleton *alunoSingleton;
     NSArray *alunos;
@@ -37,7 +37,7 @@
     fotoToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(posicaoX, posicaoY, width, height)];
     [fotoToolBar setBackgroundColor:[UIColor blackColor]];
     
-    UIBarButtonItem *addFotoItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(vincularFoto)];
+    UIBarButtonItem *addFotoItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(tirarFoto:)];
     UIBarButtonItem *cancelarEdicao = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelarEdicao)];
     
 #warning Implementar botao de remocao
@@ -72,12 +72,36 @@
     [fotoToolBar setFrame:CGRectMake(posicaoX, posicaoY, width, height)];
 }
 
+-(IBAction)tirarFoto:(id)sender {
+    UIImagePickerController *imagem = [[UIImagePickerController alloc] init];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        imagem.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        imagem.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    imagem.delegate = self;
+    [self presentViewController:imagem animated:YES completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *imagem = info[UIImagePickerControllerOriginalImage];
+    NSLog(@"AQUI");
+    FotoSingleton *foto = [FotoSingleton sharedInstance];
+    [foto salvarFoto:imagem comNome:[NSString stringWithFormat:@"%@",alunoSelecionado.tia ]];
+    [self.tableView reloadData];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 -(void)vincularFoto {
     if (!alunoSelecionado) {
         return;
     }
-    UIImage *foto = [UIImage imageNamed:@"smile"];
-    [[FotoSingleton sharedInstance] salvarFoto:foto comNome:alunoSelecionado.tia];
+//    UIImage *foto = [UIImage imageNamed:@"smile"];
+    UIImagePickerController *foto = [[UIImagePickerController alloc] init];
+    foto.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+//    [[FotoSingleton sharedInstance] salvarFoto:foto comNome:alunoSelecionado.tia];
     [_tableView reloadData];
 }
 
